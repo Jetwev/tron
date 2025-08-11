@@ -82,3 +82,6 @@ uv run pytest -v
 ```
 ./check.sh
 ```
+
+# Переменные окружения
+Все переменные окружения находятся в файле `.env`. Отмечу, что там есть переменная `NETWORK`, для установки соответствующей переменной в `Tron(network=<NETWORK>)`. Поверка сервиса была сделана для `NETWORK=nile` с данными аккаунтов по этой ссылке [nile.tronscan.org](https://nile.tronscan.org/#/blockchain/accounts).
