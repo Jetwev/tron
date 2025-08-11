@@ -1,0 +1,36 @@
+services:
+  postgresdb:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 25
+    volumes:
+      - ./data:/var/lib/postgresql/data/
+    networks:
+      - local-net
+
+  application:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=postgresdb
+    depends_on:
+      postgresdb:
+        condition: service_healthy
+    networks:
+      - local-net
+
+networks:
+  local-net:
+    driver: bridge
